@@ -1,0 +1,95 @@
+buildscript {
+    ext {
+        springBootVersion = '1.2.4.RELEASE'
+        queryDSLversion = '3.6.2'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'org.springframework:springloaded:1.2.3.RELEASE'
+        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.4"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+jar {
+    baseName = 'DevCalendar'
+    version = '1.0.0'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.provided]
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+dependencies {
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+
+    compile("com.fasterxml.jackson.core:jackson-databind")
+    compile("org.springframework.hateoas:spring-hateoas")
+    compile("org.springframework.data:spring-data-rest-webmvc:2.3.1.RELEASE")
+
+    compile("com.h2database:h2:1.4.179")
+
+    provided("org.projectlombok:lombok:1.16.2")
+    compile("org.projectlombok:lombok:1.16.2")
+
+    compile("com.mysema.querydsl:querydsl-core:${queryDSLversion}")
+    compile("com.mysema.querydsl:querydsl-jpa:${queryDSLversion}")
+    compile("com.mysema.querydsl:querydsl-apt:${queryDSLversion}:jpa")
+
+    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+// Querydsl plugin
+//querydsl {
+//    library = "com.mysema.querydsl:querydsl-apt:${queryDSLversion}"
+//    querydslSourcesDir = "src/main/java"
+//    jpa = true
+//    querydslDefault = true
+//}
