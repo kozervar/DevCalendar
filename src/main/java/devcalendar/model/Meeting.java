@@ -1,10 +1,12 @@
 package devcalendar.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,25 +15,27 @@ import java.util.List;
  */
 @Entity
 @Data
-@EqualsAndHashCode( callSuper = false, of = {"name", "length", "startDate", "endDate" })
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false, of = {"name", "length", "startDate", "endDate"})
 public class Meeting extends Identifiable {
 
-    @Column(name="name", nullable=false)
+    @Column(name = "name", nullable = false)
     @NotNull
     private String name;
 
-    @Column(name="length", nullable=false)
+    @Column(name = "length", nullable = false)
     @NotNull
     private Integer length = 60;
 
-    @Column(name="startDate", nullable=false)
+    @Column(name = "startDate", nullable = false)
     @NotNull
     private Date startDate;
 
-    @Column(name="endDate")
+    @Column(name = "endDate")
     private Date endDate;
 
-    @OneToMany(mappedBy="meeting")
-    private List<MeetingAttendee> meetingAttendees;
-
+    @OneToMany(mappedBy = "meeting")
+    private List<MeetingAttendee> meetingAttendees = new ArrayList<>();
 }
