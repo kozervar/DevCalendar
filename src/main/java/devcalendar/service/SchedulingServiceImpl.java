@@ -9,14 +9,22 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static devcalendar.service.SchedulingUtils.isTimeInRange;
-import static devcalendar.service.SchedulingUtils.isTimeOverlapingExclusive;
-import static devcalendar.service.SchedulingUtils.toLocalDateTime;
+import static devcalendar.service.SchedulingUtils.*;
 
 /**
  * Created by Marcin Kozaczyk on 2015-07-02.
  */
 public class SchedulingServiceImpl implements SchedulingService {
+
+    public boolean isAvailableForAttendees(Meeting meeting, List<Attendee> attendee) {
+        Assert.notNull(meeting, "Meeting cannot be null");
+        Assert.notNull(attendee, "Attendee list cannot be null");
+
+        return !attendee.stream()
+                .filter(a -> !isAvailable(meeting, a))
+                .findAny()
+                .isPresent();
+    }
 
     public boolean isAvailable(Meeting meeting, Attendee attendee) {
         Assert.notNull(meeting, "Meeting cannot be null");
