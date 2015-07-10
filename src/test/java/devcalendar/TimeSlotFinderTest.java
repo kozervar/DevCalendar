@@ -14,7 +14,7 @@ import java.util.*;
  * Created by Marcin Kozaczyk on 2015-07-08.
  */
 @RunWith(JUnit4.class)
-public class TimeSlotFinderTest {
+public class TimeSlotFinderTest extends  AbstractTest{
 
     private TimeSlotFinder timeSlotFinder;
 
@@ -40,23 +40,7 @@ public class TimeSlotFinderTest {
 
         TimeSlot workingTimeSlot = getWorkingTimeSlot(workingFrom, workingTo);
 
-        Set<TimeSlot> meetings = new HashSet<>(2);
-
-        LocalDateTime m1From = LocalDateTime.of(2015, 7, 7, 12, 0, 0);
-        LocalDateTime m1To = LocalDateTime.of(2015, 7, 7, 13, 0, 0);
-        meetings.add(new TimeSlot(m1From, m1To));
-
-        LocalDateTime m2From = LocalDateTime.of(2015, 7, 8, 12, 0, 0);
-        LocalDateTime m2To = LocalDateTime.of(2015, 7, 8, 13, 0, 0);
-        meetings.add(new TimeSlot(m2From, m2To));
-
-        LocalDateTime m3From = LocalDateTime.of(2015, 7, 8, 14, 0, 0);
-        LocalDateTime m3To = LocalDateTime.of(2015, 7, 8, 15, 0, 0);
-        meetings.add(new TimeSlot(m3From, m3To));
-
-        LocalDateTime m4From = LocalDateTime.of(2015, 7, 8, 15, 15, 0);
-        LocalDateTime m4To = LocalDateTime.of(2015, 7, 8, 15, 50, 0);
-        meetings.add(new TimeSlot(m4From, m4To));
+        Set<TimeSlot> meetings = getMeetings();
 
         List<TimeSlot> timeSlots = timeSlotFinder.getWorkingTimeSlots(rangeTimeSlot, workingTimeSlot);
 

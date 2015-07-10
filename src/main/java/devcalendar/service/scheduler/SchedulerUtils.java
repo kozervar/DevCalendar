@@ -2,11 +2,10 @@ package devcalendar.service.scheduler;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneOffset;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import devcalendar.service.scheduler.data.Attendee;
 import devcalendar.service.scheduler.data.AttendeeTimeSlot;
@@ -51,6 +50,13 @@ public class SchedulerUtils
         } );
         return compatibleTimeSlots;
     }
+
+    public static boolean isCompatible(Integer numberOfAttendees, AttendeeTimeSlot attendeeTimeSlot) {
+        Integer id = attendeeTimeSlot.getAttendee().getId();
+        Set<Integer> collect = attendeeTimeSlot.getCompatibleTimeSlots().stream().map(e -> e.getAttendee().getId()).collect(Collectors.toSet());
+        collect.add(id);
+        return collect.size() == numberOfAttendees;
+    }
     
     public static TimeSlot createMatchingTimeSlot( TimeSlot t1, TimeSlot t2 )
     {
@@ -82,6 +88,14 @@ public class SchedulerUtils
         Duration slotDuration = Duration.between( start, end );
 
         return slotDuration.toMinutes() >= duration;
+    }
+
+    public static LocalDateTime toLocalDateTime(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
+    }
+
+    public static Date toDate(LocalDateTime date) {
+        return Date.from(date.toInstant(ZoneOffset.UTC));
     }
 }
 

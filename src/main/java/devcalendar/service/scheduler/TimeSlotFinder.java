@@ -30,9 +30,13 @@ public class TimeSlotFinder {
         List<TimeSlot> results = new ArrayList<>();
 
         Set<TimeSlot> dailyTimeSlots = new HashSet<>(meetings.size());
+        Set<TimeSlot> nonDailyTimeSlots = new HashSet<>(meetings.size());
         sorted.stream().forEach(meeting -> {
             dailyTimeSlots.addAll(
                     timeSlots.stream().filter(timeSlot -> isTimeOverlaping(timeSlot, meeting)).collect(Collectors.toList())
+            );
+            nonDailyTimeSlots.addAll(
+                    timeSlots.stream().filter(timeSlot -> !isTimeOverlaping(timeSlot, meeting)).collect(Collectors.toList())
             );
         });
 
@@ -68,6 +72,7 @@ public class TimeSlotFinder {
             }
         }
         results = results.stream().filter(e->!e.getStart().equals(e.getEnd())).collect(Collectors.toList());
+//        results.addAll(nonDailyTimeSlots);
         results = results.stream().sorted(TimeSlot::compareTo).collect(Collectors.toList());
         return results;
     }

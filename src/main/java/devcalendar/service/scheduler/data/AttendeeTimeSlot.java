@@ -18,13 +18,18 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @EqualsAndHashCode( of =
 { "attendee", "timeSlot" } )
-@ToString
 public class AttendeeTimeSlot
 {
     private @NonNull Attendee attendee;
     private @NonNull TimeSlot timeSlot;
 
     private Set< AttendeeTimeSlot > compatibleTimeSlots = new HashSet<>();
+
+    @Override
+    public String toString()
+    {
+        return "[ " + attendee + " - " + timeSlot + " ]==" + compatibleTimeSlots.toString() + " ";
+    }
 
     public boolean isCompatible( Integer duration )
     {
